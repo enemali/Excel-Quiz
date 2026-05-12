@@ -31,6 +31,15 @@ export default function App() {
 
   const allCorrect = useMemo(() => results.every(res => res === true), [results]);
 
+  const launchTV = () => {
+    if ((window as any).fully && (window as any).fully.startApplication) {
+      (window as any).fully.startApplication('com.google.android.tvlauncher');
+    } else {
+      console.error("Fully Kiosk not detected or startApplication not supported.");
+      alert("Could not launch TV. Fully Kiosk API not available.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-neutral-900 text-white font-sans p-8 flex flex-col items-center">
       <h1 className="text-4xl font-bold mb-8 text-cyan-400">Excel Master TV Quiz</h1>
@@ -63,12 +72,12 @@ export default function App() {
         <div className="text-center">
           <h2 className="text-3xl mb-8">Quiz Complete!</h2>
           {allCorrect ? (
-            <a
-              href="intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.HOME;end"
+            <button
+              onClick={launchTV}
               className="px-8 py-4 bg-green-600 hover:bg-green-500 focus:bg-yellow-500 rounded-full text-xl font-bold transition-all outline-none focus:ring-4 focus:ring-yellow-400"
             >
               Correct! Launch TV
-            </a>
+            </button>
           ) : (
             <button 
               onClick={() => window.location.reload()}
